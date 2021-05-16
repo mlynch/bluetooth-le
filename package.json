@@ -11,6 +11,7 @@
     "verify:ios": "cd ios && pod install && xcodebuild clean build test -workspace Plugin.xcworkspace -scheme Plugin -destination \"platform=iOS Simulator,name=iPhone 12\" && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
+    "build-electron": "tsc --project electron/tsconfig.json && rollup -c electron/rollup.config.js && rimraf ./electron/build",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint ios",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- lint --fix --format ios",
     "eslint": "eslint . --ext ts",
@@ -18,7 +19,7 @@
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api BleClientInterface --output-readme README.md --output-json dist/docs.json",
     "postdocgen": "prettier README.md --write",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js && npm run build-electron",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
@@ -50,6 +51,7 @@
     "prettier-plugin-java": "^1.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.45.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "standard-version": "^9.2.0",
     "swiftlint": "^1.0.1",
     "ts-jest": "^26.5.4",
@@ -63,6 +65,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
+    "electron/",
     "CapacitorCommunityBluetoothLe.podspec"
   ],
   "keywords": [
@@ -77,6 +80,9 @@
     },
     "android": {
       "src": "android"
+    },
+    "electron": {
+      "src": "electron"
     }
   },
   "prettier": "@ionic/prettier-config",
